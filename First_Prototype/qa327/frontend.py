@@ -14,8 +14,11 @@ The html templates are stored in the 'templates' folder.
 @app.route('/register', methods=['GET'])
 def register_get():
     # templates are stored in the templates folder
-    return render_template('register.html', message='')
-
+    if 'logged_in' in session:
+        return redirect('/', code = 303)
+    else:
+        return render_template('register.html', message='')
+    
 
 @app.route('/register', methods=['POST'])
 def register_post():
@@ -31,15 +34,45 @@ def register_post():
 
     elif len(email) < 1:
         error_message = "Email format error"
+        
+    elif not (parseaddr(email)[1] == email and '@' in parseaddr(email)[1] and '.' in parseaddr(email)[1]):
+        error_message = "Email does not follow addr-spec defined in RFC 5322"
 
-    elif len(password) < 1:
+    elif len(password) < 6:
         error_message = "Password not strong enough"
+        
+    elif len(name) <= 2:
+        error_message = "User name has to be longer than 2 characters"
+        
+    elif len(name) >= 20:
+        error_message = "User name has to be less than 20 characters"
+        
+    elif not name.isalnum():
+        error_message = "User name has to be alphanumeric"
+    
+    elif name[0] == ' ' or name[-1] == ' ':
+        error_message = "Space allowed only if it is not the first or the last character"
+    
     else:
         user = bn.get_user(email)
         if user:
             error_message = "User exists"
         elif not bn.register_user(email, name, password, password2):
             error_message = "Failed to store user info."
+            
+    password_complexity = False
+    
+    for c in password:
+        if c.islower():
+            password_lower = True
+        elif c.isupper():
+            password_upper = True
+        elif c in "!@#$%^&*()-+?_=,<>/":
+            password_symbol = True
+            
+    if password_complexity is False:
+        error_message = "Password has to meet the required complexity: minimum length 6, at least one upper case, at least one lower case, and at least one special character"
+            
     # if there is any error messages when registering new user
     # at the backend, go back to the register page.
     if error_message:
