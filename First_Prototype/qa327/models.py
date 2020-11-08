@@ -27,3 +27,14 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
     db.session.commit()
+
+#Ziyu Yang, I added a new ticke database 
+class Ticket(db.Model):
+    """
+    A ticket model which defines the sql table
+    """
+    name = db.Column(db.String(1000))
+    quantity = db.Column(db.Integer)
+    price = db.Column(db.Integer)
+    date = db.Column(db.Integer)
+    
