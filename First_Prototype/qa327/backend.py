@@ -51,3 +51,34 @@ def register_user(email, name, password, password2):
 
 def get_all_tickets():
     return []
+    
+#Ziyu Yang: When we buy a new ticket, this helps us to update the quantity of new available ticket on the current page
+def get_ticket(name):
+    ticket = Ticket.query.filter_by(name = name).first()
+    return ticket
+
+# Ziyu Yang: this stores the new ticket for selling into the database
+def new_ticket_for_sell(name, quantity, price, date):
+    """
+    Create new ticekt for selling by user
+    :param name: ticket name for sell
+    :param quantity: ticket quantity for sell
+    :param price: ticket price for sell
+    :param date: ticket expiratation date for sell
+    """
+    new_ticket_for_sell = Ticket(name=name,quantity=quantity,price=price, date=date)
+    db.session.add(new_ticket_for_sell)
+    db.session.commit()
+    return None
+
+# Ziyu Yang: this stores the new ticket for buying into the database
+def new_ticket_for_buy(name,quantity):
+    """
+    Create new ticket for buying by user
+    :param name: ticket name for buy
+    :param quantity: ticket quantity for buy
+    """
+    new_ticket_for_buy = Ticket(name=name,quantity=get_ticket(name).quatiity-quantity)
+    db.session.add(new_ticket_for_buy)
+    db.session.commit()
+    return None
