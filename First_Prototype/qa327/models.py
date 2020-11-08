@@ -21,20 +21,20 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
-
-
-# it creates all the SQL tables if they do not exist
-with app.app_context():
-    db.create_all()
-    db.session.commit()
+    # Add a new entry, balance in class User
+    balance = db.Column(db.Integer)
 
 #Ziyu Yang, I added a new ticke database 
 class Ticket(db.Model):
     """
     A ticket model which defines the sql table
     """
-    name = db.Column(db.String(1000))
+    name = db.Column(db.String(1000), primary_key=True)
     quantity = db.Column(db.Integer)
     price = db.Column(db.Integer)
     date = db.Column(db.Integer)
     
+# it creates all the SQL tables if they do not exist
+with app.app_context():
+    db.create_all()
+    db.session.commit()

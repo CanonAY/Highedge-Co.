@@ -56,11 +56,10 @@ def register_post():
     else:
         user = bn.get_user(email)
         if user:
-            error_message = "User exists"
-        elif not bn.register_user(email, name, password, password2):
-            error_message = "Failed to store user info."
-            
+            error_message = "User exists"        
+    
     password_complexity = False
+
     # check if the password meet the complexity requirements
     for c in password:
         if c.islower():
@@ -70,24 +69,31 @@ def register_post():
         elif c in "!@#$%^&*()-+?_=,<>/":
             password_symbol = True
             
+    # If the password meets all complexity requirements, then the password is valid. 
+    if password_lower and password_upper and password_symbol: 
+        password_complexity = True
+
     if password_complexity is False:
         error_message = "Password has to meet the required complexity: at least one upper case, at least one lower case, and at least one special character"
             
     # if there is any error messages when registering new user
     # at the backend, go back to the register page.
-    if error_message:
+    if error_message != None:
         return render_template('register.html', message=error_message)
     else:
+        # When there is no error message, create new user, with balance initialized to 5000. 
+        bn.register_user(email, name, password, password2, 5000)
+        # Registration succeed, redirect to login page. 
         return redirect('/login')
 
 
 @app.route('/login', methods=['GET'])
 def login_get():
+    # If the user already logged in, redirect to profile. 
     if 'logged_in' in session:
         return redirect('/', code=303);
     else:
         return render_template('login.html', message='Please login')
-
 
 @app.route('/login', methods=['POST'])
 def login_post():
@@ -117,11 +123,14 @@ def login_post():
         password_lower = False
         password_upper = False
         password_symbol = False
+        # Check if the email follows RFC5322 standard
         if parseaddr(email)[1] == email and '@' in parseaddr(email)[1] and '.' in parseaddr(email)[1] :
             email_in_rfc5322 = True;
 
+        # Check if the length of password meets requirement
         if len(password) >= 6:
             password_length = True
+        # Check if the password meets requirement: contains lowercase, contains uppercase, contains special character
         for c in password:
             if c.islower():
                 password_lower = True
@@ -130,13 +139,17 @@ def login_post():
             elif c in "!@#$%^&*()-+?_=,<>/":
                 password_symbol = True
         
+        # If the password meets all complexity requirements, then the password is valid. 
         if password_length and password_lower and password_upper and password_symbol: 
             password_meet_complexity = True
 
+        # If either of the email or password doesn't meet format requirements, 
+        # then show error message to tell user login failed because of format problem.  
         if not email_in_rfc5322:
-            return render_template('login.html', message='email format is incorrect.')
+            return render_template('login.html', message='password/email format is incorrect.')
         elif not password_meet_complexity:
-            return render_template('login.html', message='password format is incorrect.')
+            return render_template('login.html', message='password/email format is incorrect.')
+        # If login failed for other reasons, that means password doesn't match the email. 
         else:
             return render_template('login.html', message='email/password combination incorrect')
 
