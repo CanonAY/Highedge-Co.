@@ -41,7 +41,7 @@ class FrontEndHomePageTest(BaseCase):
         self.open(base_url + '/logout')
         self.open(base_url)
         self.assert_element("#message")
-        self.assert_text("Please login", "#tickets div h4")
+        self.assert_text("Please login", "#message")
         
 
     @patch('qa327.backend.get_user', return_value=test_user)
