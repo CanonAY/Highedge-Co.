@@ -34,8 +34,7 @@ test_tickets = [
 ]
 
 class FrontEndHomePageTest(BaseCase):
-
-    
+  
     @patch('qa327.backend.get_user', return_value=test_user)
     @patch('qa327.backend.get_all_tickets', return_value=test_tickets)
     def test_login_success(self, *_):
