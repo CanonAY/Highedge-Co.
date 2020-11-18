@@ -59,6 +59,9 @@ def register_post():
             error_message = "User exists"        
     
     password_complexity = False
+    password_lower = False
+    password_upper = False
+    password_symbol = False
 
     # check if the password meet the complexity requirements
     for c in password:
@@ -125,7 +128,7 @@ def login_post():
         password_symbol = False
         # Check if the email follows RFC5322 standard
         if parseaddr(email)[1] == email and '@' in parseaddr(email)[1] and '.' in parseaddr(email)[1] :
-            email_in_rfc5322 = True;
+            email_in_rfc5322 = True
 
         # Check if the length of password meets requirement
         if len(password) >= 6:
@@ -146,9 +149,9 @@ def login_post():
         # If either of the email or password doesn't meet format requirements, 
         # then show error message to tell user login failed because of format problem.  
         if not email_in_rfc5322:
-            return render_template('login.html', message='password/email format is incorrect.')
+            return render_template('login.html', message='email/password format is incorrect.')
         elif not password_meet_complexity:
-            return render_template('login.html', message='password/email format is incorrect.')
+            return render_template('login.html', message='email/password format is incorrect.')
         # If login failed for other reasons, that means password doesn't match the email. 
         else:
             return render_template('login.html', message='email/password combination incorrect')
