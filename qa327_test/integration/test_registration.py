@@ -10,7 +10,7 @@ from qa327_test.conftest import base_url
 @pytest.mark.usefixtures('server')
 class Registered(BaseCase):
 
-    def register(self):
+    #def register(self):
         """register new user"""
         #self.open(base_url + '/register')
         #self.type("#email", "test0")
@@ -19,14 +19,14 @@ class Registered(BaseCase):
         #self.type("#password2", "test0")
         #self.click('input[type="submit"]')
 
-    def login(self):
+    #def login(self):
         """ Login to Swag Labs and verify that login was successful. """
         #self.open(base_url + '/login')
         #self.type("#email", "test0")
         #self.type("#password", "test0")
         #self.click('input[type="submit"]')
 
-    def test_register_login(self):
+    #def test_register_login(self):
         """ This test checks the implemented login/logout feature """
         #self.register()
         #self.login()

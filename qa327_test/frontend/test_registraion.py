@@ -33,17 +33,9 @@ test_tickets = [
     {'name': 't1', 'price': '100'}
 ]
 
-
 class FrontEndHomePageTest(BaseCase):
 
-    # If the user hasn't logged in, show the login page
-    def test_show_login_page(self, *_):
-        self.open(base_url + '/logout')
-        self.open(base_url)
-        self.assert_element("#message")
-        self.assert_text("Please login", "#tickets div h4")
-        
-
+    
     @patch('qa327.backend.get_user', return_value=test_user)
     @patch('qa327.backend.get_all_tickets', return_value=test_tickets)
     def test_login_success(self, *_):
