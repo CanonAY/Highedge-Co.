@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Profile{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h2 id="welcome-header">Hi {{ user.name }} !</h2> <!--change Welcome to Hi -->
+
+<h2 id="balance">Your Balance: {{ user.balance }}</h2> <!-- Add the balance header-->
+
+<!--Ziyu Yang: This creates the frame for the box -->
+<html>
+<body>
+<head>
+<style>
+table,th,td{
+    border:1px solid black;
+}
+</style>
+</head>
+<body>
+
+<!--Ziyu Yang: This page lists all available tickets-->
+<h2 >Here are all available tickets</h2>
+<table style = "width:100%">
+    <tr>
+        <th id="ticket-name">Ticket Name</th>
+        <th id="ticket-price">Ticket Price</th>
+        <th id="ticket-quantity">Ticket Quantity</th>
+        <th id="ticket-owener-email">Owner's Email</th>
+    </tr>
+    <div id="tickets">
+        {% for ticket in tickets %}
+            <div>
+                <tr>{{ ticket.name }}</tr>
+                <tr>{{ ticket.price }}</tr>
+                <tr>{{ ticket.quantity }}</tr>
+                <tr>{{ ticket.owenerEmail }}</tr>
+            </div>
+        {% endfor %}
+    </div>
+</table>
+
+<!-- Ziyu Yang: This page contaisn a form that user can submit the ticket info for sell -->
+<!-- contain ticket name; quantity; price; expiration date -->
+<h4 id='message'>{{message}}</h4>
+<h3> Ticket-Selling Form </h3>
+<form method="post">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input class="form-control" name="name" id="sell-name" required>
+
+    <label for="quantity">Quantity</label>
+    <input class="form-control" name="quantity" id="sell-quantity" required>
+
+    <label for="price">Price</label>
+    <input class="form-control" type="price" name="price" id="sell-price" required>
+
+    <label for="date">Expiration Date</label>
+    <input class="form-control" type="date" name="date" id="sell-date" required>
+
+    <input class="btn btn-primary" type="submit" value="Submit Selling Ticket">
+    <input class="btn btn-primary" type="submit" value="Update Selling Ticket">
+  </div>
+</form>
+
+
+<!-- Ziyu Yang: This page contaisn a form that user can submit the ticket info for buy-->
+<!-- contain ticket name; ticket quantity-->
+<h4 id='message'>{{message}}</h4>
+<h3> Ticket-Buying Form </h3>
+<form method="post">
+  <div class="form-group">
+    <label for="name">Buying Ticket</label>
+    <input class="form-control" name="name" id="buy-name" required>
+
+    <label for="quantity">Buying Quantity</label>
+    <input class="form-control" name="quantity" id="buy-quantity" required>
+
+    <input class="btn btn-primary" type="submit" value="Submit Buying Ticket">
+</div>
+</form>
+<a href='/logout'>logout</a>
+{% endblock %}
+

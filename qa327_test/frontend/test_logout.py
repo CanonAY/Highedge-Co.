@@ -19,7 +19,7 @@ test_user2 = User(
 
 class FrontEndLogoutTest(BaseCase):
 
-    # Logout will invalid the current session and redirect to the login page.
+    # R7: Logout will invalid the current session and redirect to the login page.
     # After logout, the user shouldn't be able to access restricted pages.
     @patch('qa327.backend.get_user', return_value=test_user2)
     def test_logout(self, *_):
