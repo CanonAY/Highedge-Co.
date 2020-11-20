@@ -12,7 +12,7 @@ This file defines the unit test that tests program behavior when user try to acc
 
 class FrontEnd404Test(BaseCase):
 
-    # For any other requests except the ones above, the system should return a 404 error
+    # R8: For any other requests except the ones above, the system should return a 404 error
     def test_open_wrong_page(self, *_):
         # Open a page which do not exist
         self.open(base_url + '/error')

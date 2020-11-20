@@ -19,7 +19,7 @@ test_user1 = User(
 
 class FrontEndLoginTest(BaseCase):
 
-    # If the user hasn't logged in, show the login page
+    # R1.1: If the user hasn't logged in, show the login page
     def test_not_loggedin(self, *_):
         # invalidate any existing session
         self.open(base_url + '/logout')
@@ -27,7 +27,7 @@ class FrontEndLoginTest(BaseCase):
         # confirm title of the page is "Log In"
         self.assert_title("Log In")
 
-    # the login page has a message that by default says 'please login'
+    # R1.2: the login page has a message that by default says 'please login'
     def test_please_login(self, *_):
         # invalid any existing session
         self.open(base_url + '/logout')
@@ -36,7 +36,7 @@ class FrontEndLoginTest(BaseCase):
         self.assert_element("#message")
         self.assert_text("Please login", "#message")
           
-    # If the user has logged in, redirect to the user profile page
+    # R1.3: If the user has logged in, redirect to the user profile page
     @patch('qa327.backend.get_user', return_value=test_user1)
     def test_redirect_to_profile(self, *_):
         # invalid any existing session
@@ -51,7 +51,7 @@ class FrontEndLoginTest(BaseCase):
         # confirm currently on profile page
         self.assert_title("Profile")
 
-    # The login page provides a login form which requests two fields: email and passwords
+    # R1.4: The login page provides a login form which requests two fields: email and passwords
     def test_login_form(self, *_):
         # invalidate any existing session
         self.open(base_url + '/logout')
@@ -60,7 +60,7 @@ class FrontEndLoginTest(BaseCase):
         self.assert_element("#email")
         self.assert_element("#password")
 
-    # The login form can be submitted as a POST request to the current URL (/login)
+    # R1.5: The login form can be submitted as a POST request to the current URL (/login)
     def test_post(self, *_):
         # invalidate any existing session
         self.open(base_url + '/logout')
@@ -68,7 +68,7 @@ class FrontEndLoginTest(BaseCase):
         # confirm current page contains a POST request element
         self.assert_element('form[method="post"]')
 
-    # Email and password both cannot be empty
+    # R1.6: Email and password both cannot be empty
     @patch('qa327.backend.get_user', return_value=test_user1)
     def test_form_cant_empty(self, *_):
         # invalid any existing session
@@ -104,7 +104,7 @@ class FrontEndLoginTest(BaseCase):
         self.assert_title("Profile")
         self.open(base_url + '/logout')
 
-    # Email has to follow addr-spec defined in RFC 5322
+    # R1.7: Email has to follow addr-spec defined in RFC 5322
     @patch('qa327.backend.get_user', return_value=test_user1)
     def test_email_format(self, *_):
         # invalid any existing session
@@ -132,7 +132,7 @@ class FrontEndLoginTest(BaseCase):
         self.assert_title("Profile")
         self.open(base_url + '/logout')
 
-    # Password has to meet the required complexity: minimum length 6, 
+    # R1.8: Password has to meet the required complexity: minimum length 6, 
     # at least one upper case, at least one lower case, and at least 
     # one  special character
     @patch('qa327.backend.get_user', return_value=test_user1)
@@ -162,7 +162,7 @@ class FrontEndLoginTest(BaseCase):
         self.assert_title("Profile")
         self.open(base_url + '/logout')
 
-    # For any formatting errors, render the login page and show the message  
+    # R1.9: For any formatting errors, render the login page and show the message  
     # 'email/password format is incorrect.'
     @patch('qa327.backend.get_user', return_value=test_user1)
     def test_format_incorrect(self, *_):
@@ -203,7 +203,7 @@ class FrontEndLoginTest(BaseCase):
         self.assert_title("Profile")
         self.open(base_url + '/logout')
 
-    # If email/password are correct, redirect to /
+    # R1.10: If email/password are correct, redirect to /
     @patch('qa327.backend.get_user', return_value=test_user1)
     def test_login_success(self, *_):
         # invalid any existing session
@@ -218,7 +218,7 @@ class FrontEndLoginTest(BaseCase):
         self.assert_title("Profile")
         self.open(base_url + '/logout')
 
-    # Otherwise, redirect to /login and show message  'email/password combination incorrect'
+    # R1.11: Otherwise, redirect to /login and show message  'email/password combination incorrect'
     @patch('qa327.backend.get_user', return_value=test_user1)
     def test_login_failed(self, *_):
         # invalid any existing session
