@@ -30,34 +30,34 @@ def register_post():
 
 
     if password != password2:    # password and password2 have to be exactly the same
-        error_message = "The passwords do not match"
+        error_message = "Password"
 
     elif len(email) < 1:    # email cannot be empty
-        error_message = "Email format error"
+        error_message = "Email"
         
     elif not (parseaddr(email)[1] == email and '@' in parseaddr(email)[1] and '.' in parseaddr(email)[1]):
-        error_message = "Email does not follow addr-spec defined in RFC 5322"
+        error_message = "Email"
 
     elif len(password) < 6:
-        error_message = "Password has to be at least 6 characters"
+        error_message = "Password"
         
     elif len(name) <= 2:
-        error_message = "User name has to be longer than 2 characters"
+        error_message = "User name"
         
     elif len(name) >= 20:
-        error_message = "User name has to be less than 20 characters"
+        error_message = "User name"
         
     elif not name.isalnum():
-        error_message = "User name has to be alphanumeric"
+        error_message = "User name"
     
     elif name[0] == ' ' or name[-1] == ' ':
-        error_message = "Space allowed only if it is not the first or the last character"
+        error_message = "User name"
     
     else:
         user = bn.get_user(email)
         if user:
-            error_message = "User exists"        
-    
+            error_message = "this email has been ALREADY used"
+            
     password_complexity = False
     password_lower = False
     password_upper = False
@@ -77,12 +77,12 @@ def register_post():
         password_complexity = True
 
     if password_complexity is False:
-        error_message = "Password has to meet the required complexity: at least one upper case, at least one lower case, and at least one special character"
+        error_message = "Password"
             
     # if there is any error messages when registering new user
     # at the backend, go back to the register page.
     if error_message != None:
-        return render_template('register.html', message=error_message)
+        return render_template('login.html', message='{} format is incorrect.'.format(error_message))
     else:
         # When there is no error message, create new user, with balance initialized to 5000. 
         bn.register_user(email, name, password, password2, 5000)
