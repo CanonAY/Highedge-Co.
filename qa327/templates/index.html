@@ -7,7 +7,7 @@
 {% block content %}
 <h2 id="welcome-header">Hi {{ user.name }} !</h2> <!--change Welcome to Hi -->
 
-<h2> Your Balance: {{ user.balance }} </h2> <!-- Add the balance header-->
+<h2 id="balance"> Your Balance: {{ user.balance }} </h2> <!-- Add the balance header-->
 
 <!--Ziyu Yang: This creates the frame for the box -->
 <html>
@@ -48,17 +48,17 @@ table,th,td{
 <h3> Ticket-Selling Form </h3>
 <form method="post">
   <div class="form-group">
-    <label for="name">Ticket Name</label>
-    <input class="form-control" name="name" id="name" required>
+    <label for="name">Name</label>
+    <input class="form-control" name="name" id="sell-name" required>
 
-    <label for="quantity">Ticket Quantity</label>
-    <input class="form-control" name="quantity" id="quantity" required>
+    <label for="quantity">Quantity</label>
+    <input class="form-control" name="quantity" id="sell-quantity" required>
 
-    <label for="price">Ticket Price</label>
-    <input class="form-control" type="price" name="price" id="price" required>
+    <label for="price">Price</label>
+    <input class="form-control" type="price" name="price" id="sell-price" required>
 
     <label for="date">Expiration Date</label>
-    <input class="form-control" type="date" name="date" id="date" required>
+    <input class="form-control" type="date" name="date" id="sell-date" required>
 
     <input class="btn btn-primary" type="submit" value="Submit Selling Ticket">
     <input class="btn btn-primary" type="submit" value="Update Selling Ticket">
@@ -72,11 +72,11 @@ table,th,td{
 <h3> Ticket-Buying Form </h3>
 <form method="post">
   <div class="form-group">
-    <label for="name">Ticket Name</label>
-    <input class="form-control" name="name" id="name" required>
+    <label for="name">Buying Ticket</label>
+    <input class="form-control" name="name" id="buy-name" required>
 
-    <label for="quantity">Ticket Quantity</label>
-    <input class="form-control" name="quantity" id="quantity" required>
+    <label for="quantity">Buying Quantity</label>
+    <input class="form-control" name="quantity" id="buy-quantity" required>
 
     <input class="btn btn-primary" type="submit" value="Submit Buying Ticket">
 </div>
