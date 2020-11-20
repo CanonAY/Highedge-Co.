@@ -107,7 +107,7 @@ class FrontEndRegistrationTest(BaseCase):
         self.open(base_url + '/logout')
         self.open(base_url + '/register')
         # confirm title of the page is "registration"
-        self.assert_title("registration")
+        self.assert_title("Register")
         
     # R2.3: The registration page shows a registration form requesting:
     # email, user name, password, password2
@@ -205,7 +205,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
         # invalidate any existing session
         self.open(base_url + '/logout')
@@ -218,7 +218,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm login to profile failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
         # 2) ----- Email has to follow addr-spec defined in RFC 5322 -----
         
@@ -235,7 +235,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
         # 3) ----- Password must meet complexity requirement -----
         
@@ -252,7 +252,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
     # R2.6: Password and password2 have to be exactly the same
     def test_password_same_positive(self, *_):
@@ -288,7 +288,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
     # R2.7: User name has to be non-empty, alphanumeric-only, 
     # and space allowed only if it is not the first or the last character
@@ -327,7 +327,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
         # 2) ----- user name is not alphanumeric -----
         self.open(base_url + '/register')
@@ -339,7 +339,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
         # 3) ----- space in first and last character -----
         self.open(base_url + '/register')
@@ -351,7 +351,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
     # R2.8: User name has to be longer than 2 characters and less than 20 characters
     def test_username_length_positive(self, *_):
@@ -387,7 +387,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
         # 2) ----- user name longer than 20 characters -----
         self.open(base_url + '/register')
@@ -399,7 +399,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text_visible("#message")
+        assert "Please login" not in "#message"
         
     # R2.9: For any formatting errors, redirect back to /login and show message
     # '{} format is incorrect.'.format(the_corresponding_attribute)
@@ -418,10 +418,10 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed and redirect back to /login
-        self.assert_title("Log In")
+        assert "Please login" not in "#message"
         # confirm the page shows message
         # '{} format is incorrect.'.format(the_corresponding_attribute)
-        self.assert_text("format is incorrect.", "#message")
+        self.assert_text("User name format is incorrect", "#message")
         
         # invalidate any existing session
         self.open(base_url + '/logout')
@@ -436,10 +436,10 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed and redirect back to /login
-        self.assert_title("Log In")
+        assert "Please login" not in "#message"
         # confirm the page shows message
         # '{} format is incorrect.'.format(the_corresponding_attribute)
-        self.assert_text("format is incorrect.", "#message")
+        self.assert_text("Email format is incorrect", "#message")
         
         # invalidate any existing session
         self.open(base_url + '/logout')
@@ -454,11 +454,10 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed and redirect back to /login
-        self.assert_title("Log In")
+        assert "Please login" not in "#message"
         # confirm the page shows message
         # '{} format is incorrect.'.format(the_corresponding_attribute)
-        self.assert_text("format is incorrect.", "#message")
-        
+        self.assert_text("Password format is incorrect", "#message")
         
     # R2.10: If the email already exists, show message
     # 'this email has been ALREADY used'
@@ -492,7 +491,7 @@ class FrontEndRegistrationTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
         # confirm register failed
-        self.assert_text("this email has been ALREADY used")
+        self.assert_text("this email has been ALREADY used", "#message")
         
     # R2.11: If no error regarding the inputs following the reules above,
     # create a new user, set the balance to 5000, and go back to the /login page
