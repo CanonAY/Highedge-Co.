@@ -33,7 +33,7 @@ class Ticket(db.Model):
     owner_email= db.Column(db.String(1000))
     quantity = db.Column(db.Integer)
     price = db.Column(db.Integer)
-    date = db.Column(db.Integer)
+    date = db.Column(db.String(1000))
     
 # it creates all the SQL tables if they do not exist
 with app.app_context():

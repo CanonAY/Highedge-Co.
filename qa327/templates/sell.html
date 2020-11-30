@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %}Submit Selling Ticket{% endblock %}</h1>
+
+<h4 id='message'>{{message_s}}</h4>
+<h2>Ticket Information : </h2>
+<h4 id='name'>Name : {{ticket_name}}</h4>
+<h4 id='quantity'>Quantity : {{ticket_quantity}}</h4>
+<h4 id='price'>Price : {{ticket_price}}</h4>
+<h4 id='date'>Expire Date : {{ticket_date}}</h4>
+
+<a href='/'>Return to Profile</a>
+{% endblock %}

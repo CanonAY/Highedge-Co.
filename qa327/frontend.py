@@ -56,7 +56,7 @@ def register_post():
     else:
         user = bn.get_user(email)
         if user:
-            error_message = "this email has been ALREADY used"
+            return render_template('login.html', message='this email has been ALREADY used.')
             
     password_complexity = False
     password_lower = False
@@ -103,7 +103,7 @@ def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
     user = bn.login_user(email, password)
-    
+
     if user:
         session['logged_in'] = user.email
         """
@@ -206,5 +206,69 @@ def profile(user):
     # by using @authenticate, we don't need to re-write
     # the login checking code all the time for other
     # front-end portals
-    tickets = bn.get_all_tickets()
-    return render_template('index.html', user=user, tickets=tickets)
+
+    # Get all tickets' info from backend. 
+    tickets_infor = bn.get_all_tickets_infor()
+    all_name = []
+    all_price = []
+    all_quantity = []
+    all_email = []
+    # Add all information to corresponding collumn. 
+    for ticket in tickets_infor:
+        all_name.append(ticket[0])
+        all_price.append(ticket[1])
+        all_quantity.append(ticket[2])
+        all_email.append(ticket[3])
+    # Pass all information to the HTML page. 
+    return render_template('index.html', user = user, names = all_name, prices = all_price, quantities = all_quantity, emails = all_email)
+
+
+
+
+@app.route('/sell', methods=['POST'])
+def sell_post():
+    # Get current user's email, with is the ticket owner's email. 
+    email = session['logged_in']
+    user = bn.get_user(email)
+
+    # Get ticket information from post form. 
+    name = request.form.get('sell-name')
+    quantity = int(request.form.get('sell-quantity'))
+    price = int(request.form.get('sell-price'))
+    date = request.form.get('sell-date')
+
+    # The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character.
+    # The name of the ticket is no longer than 60 characters
+    name_valid = False
+    if name.isalnum() and name[0] != " " and name[-1] != " " and len(name) >= 6 and len(name) <= 60:
+        name_valid = True
+
+    # The quantity of the tickets has to be more than 0, and less than or equal to 100.
+    quantity_valid = False
+    if quantity > 0 and quantity <= 100:
+        quantity_valid = True
+
+    # Price has to be of range [10, 100]
+    price_valid = False
+    if price >= 10 and price <= 100:
+        price_valid = True
+
+    # Date must be given in the format YYYYMMDD (e.g. 20200901)
+    date_valid = False
+    # If the format is correct, two '-' character will be added at index 4 and 7. 
+    if len(date) == 10 and date[4] == '-' and date[7] == '-' :
+        date_valid = True
+
+    # Check if the name of ticket doesn't exist in database. 
+    name_unique = False
+    ticket = bn.get_ticket(name)
+    if not ticket:
+        name_unique = True
+
+    # If all elements have valid format, then ticket information is valid, redirect to sell page and show message. 
+    if name_valid and quantity_valid and price_valid and date_valid and name_unique:
+        ticket = bn.new_ticket_for_sell(name, email, quantity, price, date)
+        return render_template('sell.html', message_s = "Ticket successfully posted", ticket_name = name, ticket_quantity = quantity, ticket_price = price, ticket_date = date)
+    # For any errors, redirect back to / and show an error message.
+    else:
+        return render_template('index.html', message_s = "Ticket format invalid", user=user)
