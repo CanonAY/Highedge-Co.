@@ -52,11 +52,7 @@ def register_post():
     
     elif name[0] == ' ' or name[-1] == ' ':
         error_message = "User name"
-    
-    else:
-        user = bn.get_user(email)
-        if user:
-            return render_template('login.html', message='this email has been ALREADY used.')
+
             
     password_complexity = False
     password_lower = False
@@ -84,10 +80,14 @@ def register_post():
     if error_message != None:
         return render_template('login.html', message='{} format is incorrect.'.format(error_message))
     else:
-        # When there is no error message, create new user, with balance initialized to 5000. 
-        bn.register_user(email, name, password, password2, 5000)
-        # Registration succeed, redirect to login page. 
-        return redirect('/login')
+        user = bn.get_user(email)
+        if user:
+            return render_template('login.html', message='this email has been ALREADY used.')
+        else:
+            # When there is no error message, create new user, with balance initialized to 5000. 
+            bn.register_user(email, name, password, password2, 5000)
+            # Registration succeed, redirect to login page. 
+            return redirect('/login')
 
 
 @app.route('/login', methods=['GET'])
