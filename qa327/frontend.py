@@ -102,6 +102,40 @@ def login_get():
 def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
+
+    email_in_rfc5322 = False
+    password_meet_complexity = False
+    password_length = False
+    password_lower = False
+    password_upper = False
+    password_symbol = False
+    # Check if the email follows RFC5322 standard
+    if parseaddr(email)[1] == email and '@' in parseaddr(email)[1] and '.' in parseaddr(email)[1] :
+        email_in_rfc5322 = True
+
+    # Check if the length of password meets requirement
+    if len(password) >= 6:
+        password_length = True
+    # Check if the password meets requirement: contains lowercase, contains uppercase, contains special character
+    for c in password:
+        if c.islower():
+            password_lower = True
+        elif c.isupper():
+            password_upper = True
+        elif c in "!@#$%^&*()-+?_=,<>/":
+            password_symbol = True
+        
+    # If the password meets all complexity requirements, then the password is valid. 
+    if password_length and password_lower and password_upper and password_symbol: 
+        password_meet_complexity = True
+
+    # If either of the email or password doesn't meet format requirements, 
+    # then show error message to tell user login failed because of format problem.  
+    if not email_in_rfc5322:
+        return render_template('login.html', message='email/password format is incorrect.')
+    elif not password_meet_complexity:
+        return render_template('login.html', message='email/password format is incorrect.')
+
     user = bn.login_user(email, password)
 
     if user:
@@ -120,45 +154,14 @@ def login_post():
         # code 303 is to force a 'GET' request
         return redirect('/', code=303)
     else:
-        email_in_rfc5322 = False
-        password_meet_complexity = False
-        password_length = False
-        password_lower = False
-        password_upper = False
-        password_symbol = False
-        # Check if the email follows RFC5322 standard
-        if parseaddr(email)[1] == email and '@' in parseaddr(email)[1] and '.' in parseaddr(email)[1] :
-            email_in_rfc5322 = True
-
-        # Check if the length of password meets requirement
-        if len(password) >= 6:
-            password_length = True
-        # Check if the password meets requirement: contains lowercase, contains uppercase, contains special character
-        for c in password:
-            if c.islower():
-                password_lower = True
-            elif c.isupper():
-                password_upper = True
-            elif c in "!@#$%^&*()-+?_=,<>/":
-                password_symbol = True
-        
-        # If the password meets all complexity requirements, then the password is valid. 
-        if password_length and password_lower and password_upper and password_symbol: 
-            password_meet_complexity = True
-
-        # If either of the email or password doesn't meet format requirements, 
-        # then show error message to tell user login failed because of format problem.  
-        if not email_in_rfc5322:
-            return render_template('login.html', message='email/password format is incorrect.')
-        elif not password_meet_complexity:
-            return render_template('login.html', message='email/password format is incorrect.')
         # If login failed for other reasons, that means password doesn't match the email. 
-        else:
-            return render_template('login.html', message='email/password combination incorrect')
+        return render_template('login.html', message='email/password combination incorrect')
+            
 
 
 @app.route('/logout')
 def logout():
+    # Invalidate current session.
     if 'logged_in' in session:
         session.pop('logged_in', None)
     return redirect('/')
@@ -208,17 +211,17 @@ def profile(user):
     # front-end portals
 
     # Get all tickets' info from backend. 
-    tickets_infor = bn.get_all_tickets_infor()
+    tickets = bn.get_all_tickets()
     all_name = []
     all_price = []
     all_quantity = []
     all_email = []
     # Add all information to corresponding collumn. 
-    for ticket in tickets_infor:
-        all_name.append(ticket[0])
-        all_price.append(ticket[1])
-        all_quantity.append(ticket[2])
-        all_email.append(ticket[3])
+    for ticket in tickets:
+        all_name.append(ticket.name)
+        all_price.append(ticket.price)
+        all_quantity.append(ticket.quantity)
+        all_email.append(ticket.owner_email)
     # Pass all information to the HTML page. 
     return render_template('index.html', user = user, names = all_name, prices = all_price, quantities = all_quantity, emails = all_email)
 
@@ -271,7 +274,20 @@ def sell_post():
         return render_template('sell.html', message_s = "Ticket successfully posted", ticket_name = name, ticket_quantity = quantity, ticket_price = price, ticket_date = date)
     # For any errors, redirect back to / and show an error message.
     else:
-        return render_template('index.html', message_s = "Ticket format invalid", user=user)
+        # Get all tickets' info from backend. 
+        tickets = bn.get_all_tickets()
+        all_name = []
+        all_price = []
+        all_quantity = []
+        all_email = []
+        # Add all information to corresponding collumn. 
+        for ticket in tickets:
+            all_name.append(ticket.name)
+            all_price.append(ticket.price)
+            all_quantity.append(ticket.quantity)
+            all_email.append(ticket.owner_email)
+        # Pass all information to the HTML page. 
+        return render_template('index.html', message_s = "Ticket format invalid", user = user, names = all_name, prices = all_price, quantities = all_quantity, emails = all_email)
 
     
 @app.route('/buy', methods=['POST'])
@@ -320,15 +336,27 @@ def buy_post():
             
     # if there is no error in the buying form 
     if name_valid and name_len and quantity_valid and ticket_exist and quantity_require and balance_valid:
-        return render_template('buy.html', message_b = "Ticket successfully posted", ticket_name = name, ticket_quantity = quantity)
-
+        return render_template('buy.html', message_b = "Transaction successful", ticket_name = name, ticket_quantity = quantity)
     #there is error(s) in the buying form 
     else: 
-        return render_template('index.html', message_b = "Ticket format invalid", user=user)
+        # Get all tickets' info from backend. 
+        tickets = bn.get_all_tickets()
+        all_name = []
+        all_price = []
+        all_quantity = []
+        all_email = []
+        # Add all information to corresponding collumn. 
+        for ticket in tickets:
+            all_name.append(ticket.name)
+            all_price.append(ticket.price)
+            all_quantity.append(ticket.quantity)
+            all_email.append(ticket.owner_email)
+        # Pass all information to the HTML page. 
+        return render_template('index.html', message_d = "Ticket format invalid", user = user, names = all_name, prices = all_price, quantities = all_quantity, emails = all_email)
 
 
 
-@app.route('/sell', methods=['POST'])
+@app.route('/update', methods=['POST'])
 def update_post():
     
     # Get current user's email, with is the ticket owner's email. 
@@ -336,10 +364,10 @@ def update_post():
     user = bn.get_user(email)
     
     # Get ticket information from post form. 
-    name = request.form.get('sell-name')
-    quantity = int(request.form.get('sell-quantity'))
-    price = int(request.form.get('sell-price'))
-    date = request.form.get('sell-date')
+    name = request.form.get('update-name')
+    quantity = int(request.form.get('update-quantity'))
+    price = int(request.form.get('update-price'))
+    date = request.form.get('update-date')
     
     # The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character
     # name of the ticket is no longer than 60 characters
@@ -362,8 +390,35 @@ def update_post():
         
     # If all elements have valid format, then ticket information is valid, redirect to sell page and show message. 
     if name_valid and quantity_valid and price_valid and date_valid and name_exist:
-        ticket = bn.new_ticket_for_update(name, email, quantity, price, date)
-        return render_template('sell.html', message_s = "Ticket successfully updated", ticket_name = name, ticket_quantity = quantity, ticket_price = price, ticket_date = date)
+        # Call backend update ticket method.
+        bn.update_ticket(name, email, quantity, price, date)
+        # Get all tickets' info from backend. 
+        tickets = bn.get_all_tickets()
+        all_name = []
+        all_price = []
+        all_quantity = []
+        all_email = []
+        # Add all information to corresponding collumn. 
+        for ticket in tickets:
+            all_name.append(ticket.name)
+            all_price.append(ticket.price)
+            all_quantity.append(ticket.quantity)
+            all_email.append(ticket.owner_email)
+        # Pass all information to the HTML page. 
+        return render_template('index.html', message_u = "Ticket information updated", user = user, names = all_name, prices = all_price, quantities = all_quantity, emails = all_email)
     # For any errors, redirect back to / and show an error message.
     else:
-        return render_template('index.html', message_s = "Ticket format invalid", user=user)
+        # Get all tickets' info from backend. 
+        tickets = bn.get_all_tickets()
+        all_name = []
+        all_price = []
+        all_quantity = []
+        all_email = []
+        # Add all information to corresponding collumn. 
+        for ticket in tickets:
+            all_name.append(ticket.name)
+            all_price.append(ticket.price)
+            all_quantity.append(ticket.quantity)
+            all_email.append(ticket.owner_email)
+        # Pass all information to the HTML page. 
+        return render_template('index.html', message_u = "Ticket format invalid", user = user, names = all_name, prices = all_price, quantities = all_quantity, emails = all_email)
