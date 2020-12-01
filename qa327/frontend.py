@@ -328,3 +328,42 @@ def buy_post():
 
 
 
+@app.route('/sell', methods=['POST'])
+def update_post():
+    
+    # Get current user's email, with is the ticket owner's email. 
+    email = session['logged_in']
+    user = bn.get_user(email)
+    
+    # Get ticket information from post form. 
+    name = request.form.get('sell-name')
+    quantity = int(request.form.get('sell-quantity'))
+    price = int(request.form.get('sell-price'))
+    date = request.form.get('sell-date')
+    
+    # The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character
+    # name of the ticket is no longer than 60 characters
+    name_valid = name.isalnum() and name[0] != " " and name[-1] != " " and len(name) >= 6 and len(name) <= 60
+    
+    # The quantity of the tickets has to be more than 0, and less than or equal to 100
+    quantity_valid = quantity > 0 and quantity <= 100
+    
+    # Price has to be of range [10, 100]
+    price_valid = price >= 10 and price <= 100
+    
+    # Date must be given in the format YYYYMMDD
+    date_valid = len(date) == 10 and date[4] == '-' and date[7] == '-'
+    
+    # The ticket of the given name must exist
+    name_exist = False
+    ticket = bn.get_ticket(name)
+    if ticket:
+        name_exist = True
+        
+    # If all elements have valid format, then ticket information is valid, redirect to sell page and show message. 
+    if name_valid and quantity_valid and price_valid and date_valid and name_exist:
+        ticket = bn.new_ticket_for_update(name, email, quantity, price, date)
+        return render_template('sell.html', message_s = "Ticket successfully updated", ticket_name = name, ticket_quantity = quantity, ticket_price = price, ticket_date = date)
+    # For any errors, redirect back to / and show an error message.
+    else:
+        return render_template('index.html', message_s = "Ticket format invalid", user=user)
