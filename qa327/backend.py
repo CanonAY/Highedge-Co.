@@ -86,3 +86,18 @@ def new_ticket_for_buy(name,quantity):
     db.session.add(buy_ticket)
     db.session.commit()
     return buy_ticket
+
+# This method updates the ticket information
+def update_ticket(name, email, quantity, price, date):
+    """
+    Change ticket information
+    :param name: ticket name for sell
+    :param quantity: ticket quantity for sell
+    :param price: ticket price for sell
+    :param date: ticket expiratation date for sell
+    """
+    ticket = get_ticket(name)
+    db.session.remove(ticket)   # remove the original ticket
+    new_ticket = Ticket(name=name, owner_email=email, quantity=quantity, price=price, date=date)    # create a new ticket to replace the original one
+    db.session.commit()
+    return new_ticket
