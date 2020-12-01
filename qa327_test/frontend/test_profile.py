@@ -12,9 +12,9 @@ This is the test case for R3
 """
 #Mock the sample user 
 test_user =User(
-	  email = 'test_frontend@test.com',
+	  email = 'test_profile@test.com',
 	  name = 'test_frontend',
-	  password = generate_password_hash('test_frontend'),
+	  password = generate_password_hash('TEST_frontend'),
 	  balance =5000
 )
 
@@ -28,8 +28,8 @@ class FrontEndR3Test(BaseCase):
         self.open(base_url + '/logout')
         #use the sample user to loggin 
         self.open(base_url + '/login')
-        self.type("#email", "test_frontend@test.com")
-        self.type("#password", "test_frontend")
+        self.type("#email", "test_profile@test.com")
+        self.type("#password", "TEST_frontend")
         self.click('input[type="submit"]')
 
     def test_redirect(self, *__):
