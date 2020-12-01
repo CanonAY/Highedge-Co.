@@ -53,12 +53,12 @@ def register_user(email, name, password, password2, balance):
 def get_all_tickets_infor():
     return tickets_infor
     
-#Ziyu Yang: When we buy a new ticket, this helps us to update the quantity of new available ticket on the current page
+# When we buy a new ticket, this helps us to update the quantity of new available ticket on the current page
 def get_ticket(name):
     ticket = Ticket.query.filter_by(name = name).first()
     return ticket
 
-# Ziyu Yang: this stores the new ticket for selling into the database
+# This stores the new ticket for selling into the database
 def new_ticket_for_sell(name, email, quantity, price, date):
     """
     Create new ticekt for selling by user
@@ -75,7 +75,7 @@ def new_ticket_for_sell(name, email, quantity, price, date):
     tickets_infor.append(ticket_infor)
     return new_ticket
 
-# Ziyu Yang: this stores the new ticket for buying into the database
+# This stores the new ticket for buying into the database
 def new_ticket_for_buy(name,quantity):
     """
     Create new ticket for buying by user
