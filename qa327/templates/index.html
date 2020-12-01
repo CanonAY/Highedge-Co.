@@ -11,11 +11,13 @@
 
 <!--Ziyu Yang: This creates the frame for the box -->
 <html>
-<body>
 <head>
 <style>
-table,th,td{
+table,th,td {
     border:1px solid black;
+}
+th {
+    text-align: center;
 }
 </style>
 </head>
@@ -23,42 +25,65 @@ table,th,td{
 
 <!--Ziyu Yang: This page lists all available tickets-->
 <h2 >Here are all available tickets</h2>
-<table style = "width:100%">
+<table style = "width:100%" id = "current_tickets">
     <tr>
         <th> Ticket Name</th>
         <th> Ticket Price</th>
         <th> Ticket Quantity</th>
         <th> Owner's Email</th>
     </tr>
-    <div id="tickets">
-        {% for ticket in tickets %}
-            <div>
-                <tr>{{ ticket.name }}</tr>
-                <tr>{{ ticket.price }}</tr>
-                <tr>{{ ticket.quantity }}</tr>
-                <tr>{{ ticket.owenerEmail }}</tr>
-            </div>
-        {% endfor %}
-    </div>
 </table>
+<br>
+
+
+
+<script>
+    // This function adds all ticket information in database to the HTML table.
+    function add_ticket() {
+        var table = document.getElementById("current_tickets");
+        var names = "{{names}}".replace("[", "").replace("]", "").replace(" ", "").replace("&#39;", "");
+        var names = names.split(",");
+        var prices = "{{prices}}".replace("[", "").replace("]", "").replace(" ", "");
+        var prices = prices.split(",");
+        var quantities = "{{quantities}}".replace("[", "").replace("]", "").replace(" ", "");
+        var quantities = quantities.split(",");
+        var emails = "{{emails}}".replace("[", "").replace("]", "").replace(" ", "").replace("&#39;", "");
+        var emails = emails.split(",");
+        var i;
+        for (i = 0; i < names.length; i++) {
+            var row = table.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            cell1.innerHTML = names[i];
+            cell2.innerHTML = prices[i];
+            cell3.innerHTML = quantities[i];
+            cell4.innerHTML = emails[i];
+        }
+    }
+
+    add_ticket();
+
+</script>
 
 <!-- Ziyu Yang: This page contaisn a form that user can submit the ticket info for sell -->
 <!-- contain ticket name; quantity; price; expiration date -->
-<h4 id='message'>{{message}}</h4>
+<h4 id='message_s'>{{message_s}}</h4>
 <h3> Ticket-Selling Form </h3>
-<form method="post">
+<form action = "/sell" method="post">
   <div class="form-group">
     <label for="name">Name</label>
-    <input class="form-control" name="name" id="sell-name" required>
+    <input class="form-control" name="sell-name" id="sell-name" required>
 
     <label for="quantity">Quantity</label>
-    <input class="form-control" name="quantity" id="sell-quantity" required>
+    <input class="form-control" name="sell-quantity" id="sell-quantity" required>
 
     <label for="price">Price</label>
-    <input class="form-control" type="price" name="price" id="sell-price" required>
+    <input class="form-control" type="price" name="sell-price" id="sell-price" required>
 
     <label for="date">Expiration Date</label>
-    <input class="form-control" type="date" name="date" id="sell-date" required>
+    <input class="form-control" type="date" name="sell-date" id="sell-date" required>
 
     <input class="btn btn-primary" type="submit" value="Submit Selling Ticket">
     <input class="btn btn-primary" type="submit" value="Update Selling Ticket">
@@ -68,15 +93,15 @@ table,th,td{
 
 <!-- Ziyu Yang: This page contaisn a form that user can submit the ticket info for buy-->
 <!-- contain ticket name; ticket quantity-->
-<h4 id='message'>{{message}}</h4>
+<h4 id='message_b'>{{message_b}}</h4>
 <h3> Ticket-Buying Form </h3>
-<form method="post">
+<form action = "/buy" method="post">
   <div class="form-group">
     <label for="name">Buying Ticket</label>
-    <input class="form-control" name="name" id="buy-name" required>
+    <input class="form-control" name="buy-name" id="buy-name" required>
 
     <label for="quantity">Buying Quantity</label>
-    <input class="form-control" name="quantity" id="buy-quantity" required>
+    <input class="form-control" name="buy-quantity" id="buy-quantity" required>
 
     <input class="btn btn-primary" type="submit" value="Submit Buying Ticket">
 </div>
@@ -84,3 +109,6 @@ table,th,td{
 <a href='/logout'>logout</a>
 {% endblock %}
 
+
+</body>
+</html>

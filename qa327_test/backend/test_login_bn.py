@@ -21,7 +21,7 @@ class BackEndLoginTest(BaseCase):
         self.open(base_url + '/register')
 
         # enter test user email, name and password
-        self.type("#email", "test_frontend@test.com")
+        self.type("#email", "test_bn_frontend@test.com")
         self.type("#name", "testfrontend")
         self.type("#password", "TEST_frontend")
         self.type("#password2", "TEST_frontend")
@@ -31,7 +31,7 @@ class BackEndLoginTest(BaseCase):
         self.assert_title("Log In")
                 
         """ test 1: user exists in database, password matches the email, email inserted is exact same as what stored in database """
-        self.type("#email", "test_frontend@test.com")
+        self.type("#email", "test_bn_frontend@test.com")
         self.type("#password", "TEST_frontend")
         self.click('input[type="submit"]')
         # confirm login success, session granted
@@ -47,14 +47,14 @@ class BackEndLoginTest(BaseCase):
         self.assert_title("Log In")
 
         """ test 3: user exists in database, password doesn't match the email, email inserted is exact same as what stored in database """
-        self.type("#email", "test_frontend@test.com")
+        self.type("#email", "test_bn_frontend@test.com")
         self.type("#password", "frontend_TEST")
         self.click('input[type="submit"]')
         # confirm login failed
         self.assert_title("Log In")
 
         """ test 4: user exists in database, password matches the email, email inserted is not same as what stored in database """
-        self.type("#email", "test_frontend")
+        self.type("#email", "test_bn_frontend")
         self.type("#password", "frontend_TEST")
         self.click('input[type="submit"]')
         # confirm login failed

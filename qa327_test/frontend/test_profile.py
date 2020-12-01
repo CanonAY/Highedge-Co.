@@ -113,8 +113,6 @@ class FrontEndR3Test(BaseCase):
         #self.assert_element("#ticket-quantity")
         self.assert_text("Owner's Email")
         #test whether it include available ticket owner email field 
-        #self.assert_element("#ticket-owener-email")
-        self.assert_element("#tickets")
         self.open(base_url + '/logout')
 
     @patch('qa327.backend.get_user', return_value=test_user)
