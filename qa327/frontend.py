@@ -320,7 +320,6 @@ def buy_post():
             
     # if there is no error in the buying form 
     if name_valid and name_len and quantity_valid and ticket_exist and quantity_require and balance_valid:
-        ticket = bn.new_ticket_for_buy(name,quantity)
         return render_template('buy.html', message_b = "Ticket successfully posted", ticket_name = name, ticket_quantity = quantity)
 
     #there is error(s) in the buying form 
