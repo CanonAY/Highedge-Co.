@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %}Submit Buying Ticket{% endblock %}</h1>
+
+<h4 id='message'>{{message_b}}</h4> 
+<!-- it includes: ticket name, ticket quantity -->
+<h2 >Buying Ticket Information</h2>
+<h4 id='name'>Name: {{ticket_name}}</h4>
+<h4 id='quantity'>Quantity: {{ticket_quantity}}</h4>
+
+<a href='/'>Return to Pofile Page</a>
+{% endblock %}

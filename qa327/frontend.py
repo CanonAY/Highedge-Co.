@@ -273,6 +273,7 @@ def sell_post():
     else:
         return render_template('index.html', message_s = "Ticket format invalid", user=user)
 
+
 @app.route('/sell', methods=['POST'])
 def update_post():
     
@@ -312,3 +313,59 @@ def update_post():
     # For any errors, redirect back to / and show an error message.
     else:
         return render_template('index.html', message_s = "Ticket format invalid", user=user)
+=======
+    
+@app.route('/buy', methods=['POST'])
+def buy_post():
+
+    #Get into current user's account to proceed buying process
+    email = session['logged_in']
+    user = bn.get_user(email)
+
+    #Get the name and quantity from the buying form
+    name = request.form.get('buy-name')
+    quantity = int(request.form.get('buy-quantity'))
+
+    # the name of the ticket has to be alphanumeric-only and space is allowed with requirements
+    name_valid = False
+    if name.isalnum() and name[0] != " " and name[-1] != " ":
+        name_valid = True
+
+    # the name of the ticket is no longer than 60 characters
+    name_len = False
+    if len(name) <= 60 and len(name) >=6:
+        name_len = True
+
+    # quantity of ticket is within the range 0(disclusive) to 100(inclusive)
+    quantity_valid = False
+    if quantity > 0 and quantity <= 100:
+        quantity_valid = True
+
+    # ticket name does not exsit in the database
+    ticket_exist = False
+    #check the ticket name from the backend
+    ticket = bn.get_ticket(name)
+    if ticket:
+        ticket_exist = True 
+
+    # ticket has more quantaties than required to buy
+    quantity_require = False
+    if quantity <= ticket.quantity:
+        quantity_require = True
+
+    # user has more balance than the ticket price * quantity + service fee (35%) + tax(5%)
+    required_price = int(ticket.price) * int(ticket.quantity) * (1 + 0.35 + 0.05)
+    balance_valid = False
+    if user.balance >= required_price:
+        balance_valid = True 
+            
+    # if there is no error in the buying form 
+    if name_valid and name_len and quantity_valid and ticket_exist and quantity_require and balance_valid:
+        return render_template('buy.html', message_b = "Ticket successfully posted", ticket_name = name, ticket_quantity = quantity)
+
+    #there is error(s) in the buying form 
+    else: 
+        return render_template('index.html', message_b = "Ticket format invalid", user=user)
+
+
+
