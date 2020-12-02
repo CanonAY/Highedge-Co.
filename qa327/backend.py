@@ -5,8 +5,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 This file defines all backend logic that interacts with database and other services
 """
 
-tickets_infor = []
-
 def get_user(email):
     """
     Get a user by a given email
@@ -50,8 +48,10 @@ def register_user(email, name, password, password2, balance):
     return new_user
 
 
-def get_all_tickets_infor():
-    return tickets_infor
+# retrieve all tickets information stored in database.
+def get_all_tickets():
+    return Ticket.query.all()
+
     
 # When we buy a new ticket, this helps us to update the quantity of new available ticket on the current page
 def get_ticket(name):
@@ -70,22 +70,7 @@ def new_ticket_for_sell(name, email, quantity, price, date):
     new_ticket = Ticket(name=name, owner_email=email, quantity=quantity, price=price, date=date)
     db.session.add(new_ticket)
     db.session.commit()
-    ticket_infor = [name, price, quantity, email]
-    global tickets_infor
-    tickets_infor.append(ticket_infor)
     return new_ticket
-
-# This stores the new ticket for buying into the database
-def new_ticket_for_buy(name,quantity):
-    """
-    Create new ticket for buying by user
-    :param name: ticket name for buy
-    :param quantity: ticket quantity for buy
-    """
-    buy_ticket = Ticket(name=name,quantity=get_ticket(name).quantity-quantity)
-    db.session.add(buy_ticket)
-    db.session.commit()
-    return buy_ticket
 
 # This method updates the ticket information
 def update_ticket(name, email, quantity, price, date):
@@ -96,8 +81,10 @@ def update_ticket(name, email, quantity, price, date):
     :param price: ticket price for sell
     :param date: ticket expiratation date for sell
     """
-    ticket = get_ticket(name)
-    db.session.remove(ticket)   # remove the original ticket
-    new_ticket = Ticket(name=name, owner_email=email, quantity=quantity, price=price, date=date)    # create a new ticket to replace the original one
+    # Find target ticket in database, and delete it. 
+    Ticket.query.filter(Ticket.name == name).delete()
+    # Then add a new ticket to the database, with same name but modified information. 
+    new_ticket = Ticket(name=name, owner_email=email, quantity=quantity, price=price, date=date)
+    db.session.add(new_ticket)
     db.session.commit()
     return new_ticket
