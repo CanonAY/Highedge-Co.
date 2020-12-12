@@ -48,7 +48,7 @@ class FrontEndR6Test(BaseCase):
         """
         This add new ticket that has the name TESTticket1 with quantity 50 into the database
         """
-        self.type("#sell-name", "TESTticket3")
+        self.type("#sell-name", "testTicket2")
         self.type("#sell-quantity", "60")
         self.type("#sell-price", "90")
         date = self.find_element("#sell-date")
@@ -197,7 +197,7 @@ class FrontEndR6Test(BaseCase):
         self.sell_input()
 
         #negative: user didn't have enough balance to buy the ticket
-        self.type("#buy-name", "TESTticket3") 
+        self.type("#buy-name", "testTicket2") 
         self.type("#buy-quantity", "45")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message_b")
@@ -251,7 +251,7 @@ class FrontEndR6Test(BaseCase):
         self.assert_text("Ticket format invalid", "#message_b")
         self.open(base_url)
         #negative5: enter valid ticket name with the quantity that the user's balance won't meet the requirement
-        self.type("#buy-name", "TESTticket3") 
+        self.type("#buy-name", "testTicket2") 
         self.type("#buy-quantity", "50")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message_b")
