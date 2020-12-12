@@ -1,0 +1,26 @@
+test_login_bn.BackEndLoginTest.test_login_user
+----------------------------------------------------
+Last Page: http://localhost:8081/register
+  Browser: chrome
+Timestamp: 1607788864  (Unix Timestamp)
+     Date: Saturday, December 12, 2020
+     Time: 11:01:04 AM  (EDT, UTC-05:00)
+----------------------------------------------------
+Traceback: File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/unittest/case.py", line 593, in run
+    self._callTestMethod(testMethod)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/unittest/case.py", line 550, in _callTestMethod
+    method()
+  File "/Users/zhangyz/A5.2/qa327_test/backend/test_login_bn.py", line 38, in test_login_user
+    self.assert_title("Profile")
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/seleniumbase/fixtures/base_case.py", line 2927, in assert_title
+    self.assertEqual(expected, actual, "Expected page title [%s] "
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/unittest/case.py", line 831, in assertEqual
+    assertion_func(first, second, msg=msg)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/unittest/case.py", line 1211, in assertMultiLineEqual
+    self.fail(self._formatMessage(msg, standardMsg))
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/unittest/case.py", line 670, in fail
+    raise self.failureException(msg)
+Exception: 'Profile' != 'Log In'
+- Profile
++ Log In
+ : Expected page title [Profile] does not match the actual page title [Log In]!

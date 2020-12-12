@@ -323,16 +323,16 @@ def buy_post():
     if ticket:
         ticket_exist = True 
 
-    # ticket has more quantaties than required to buy
-    quantity_require = False
-    if quantity <= ticket.quantity:
-        quantity_require = True
+        # ticket has more quantaties than required to buy
+        quantity_require = False
+        if quantity <= ticket.quantity:
+            quantity_require = True
 
-    # user has more balance than the ticket price * quantity + service fee (35%) + tax(5%)
-    required_price = int(ticket.price) * int(ticket.quantity) * (1 + 0.35 + 0.05)
-    balance_valid = False
-    if user.balance >= required_price:
-        balance_valid = True 
+        # user has more balance than the ticket price * quantity + service fee (35%) + tax(5%)
+        required_price = int(ticket.price) * int(ticket.quantity) * (1 + 0.35 + 0.05)
+        balance_valid = False
+        if user.balance >= required_price:
+            balance_valid = True 
             
     # if there is no error in the buying form 
     if name_valid and name_len and quantity_valid and ticket_exist and quantity_require and balance_valid:
