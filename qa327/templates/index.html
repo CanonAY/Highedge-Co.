@@ -41,13 +41,13 @@ th {
     // This function adds all ticket information in database to the HTML table.
     function add_ticket() {
         var table = document.getElementById("current_tickets");
-        var names = "{{names}}".replace("[", "").replace("]", "").replace(" ", "").replace("&#39;", "");
+        var names = "{{names}}".replace("[", "").replace("]", "").replace(" ", "").replace("&#39;", "").replace("'", "");
         var names = names.split(",");
         var prices = "{{prices}}".replace("[", "").replace("]", "").replace(" ", "");
         var prices = prices.split(",");
         var quantities = "{{quantities}}".replace("[", "").replace("]", "").replace(" ", "");
         var quantities = quantities.split(",");
-        var emails = "{{emails}}".replace("[", "").replace("]", "").replace(" ", "").replace("&#39;", "");
+        var emails = "{{emails}}".replace("[", "").replace("]", "").replace(" ", "").replace("&#39;", "").replace("'", "");
         var emails = emails.split(",");
         var i;
         for (i = 0; i < names.length; i++) {

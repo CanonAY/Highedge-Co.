@@ -352,7 +352,7 @@ def buy_post():
             all_quantity.append(ticket.quantity)
             all_email.append(ticket.owner_email)
         # Pass all information to the HTML page. 
-        return render_template('index.html', message_d = "Ticket format invalid", user = user, names = all_name, prices = all_price, quantities = all_quantity, emails = all_email)
+        return render_template('index.html', message_b = "Ticket format invalid", user = user, names = all_name, prices = all_price, quantities = all_quantity, emails = all_email)
 
 
 
