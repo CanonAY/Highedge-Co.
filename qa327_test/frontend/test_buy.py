@@ -37,7 +37,7 @@ class FrontEndR6Test(BaseCase):
         """
         This add new ticket that has the name TESTticket1 with quantity 50 into the database
         """
-        self.type("#sell-name", "TESTticket4")
+        self.type("#sell-name", "testTicket1")
         self.type("#sell-quantity", "50")
         self.type("#sell-price", "50")
         date = self.find_element("#sell-date")
@@ -92,7 +92,7 @@ class FrontEndR6Test(BaseCase):
         """
         Positive: enter valid ticket name
         """
-        self.type("#buy-name", "TESTticket4")
+        self.type("#buy-name", "testTicket1")
         self.type("#buy-quantity", "40")
         self.click('input[value="Submit Buying Ticket"]')
         # assert ticket submit succeed 
@@ -119,7 +119,7 @@ class FrontEndR6Test(BaseCase):
         self.open(base_url)
 
         #postive: ticket name has thee length that is less than 60 characters
-        self.type("#buy-name", "TESTticket4") 
+        self.type("#buy-name", "testTicket1") 
         self.type("#buy-quantity", "4")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message")
@@ -137,14 +137,14 @@ class FrontEndR6Test(BaseCase):
         self.login()
         self.sell_input()
         #negative: ticket quantithy is more than 100
-        self.type("#buy-name", "TESTticket4") 
+        self.type("#buy-name", "testTicket1") 
         self.type("#buy-quantity", "104")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message_b")
         self.assert_text("Ticket format invalid", "#message_b")
         self.open(base_url)
         #positive: ticket quantity is between 0 and 100(inclusive)
-        self.type("#buy-name", "TESTticket4") 
+        self.type("#buy-name", "testTicket1") 
         self.type("#buy-quantity", "40")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message")
@@ -163,7 +163,7 @@ class FrontEndR6Test(BaseCase):
         self.sell_input()
 
         #negative1: ticket does not exist
-        self.type("#buy-name", "TESTticket2") 
+        self.type("#buy-name", "testTicket2") 
         self.type("#buy-quantity", "40")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message_b")
@@ -171,7 +171,7 @@ class FrontEndR6Test(BaseCase):
         self.open(base_url)
         
         #negative2: ticket does exist but doesn't have enough quantity 
-        self.type("#buy-name", "TESTticket4") 
+        self.type("#buy-name", "testTicket1") 
         self.type("#buy-quantity", "60")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message_b")
@@ -179,7 +179,7 @@ class FrontEndR6Test(BaseCase):
         self.open(base_url)
 
         #positive: ticket exist and ticket has enough quantity 
-        self.type("#buy-name", "TESTticket4") 
+        self.type("#buy-name", "testTicket1") 
         self.type("#buy-quantity", "20")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message")
@@ -205,7 +205,7 @@ class FrontEndR6Test(BaseCase):
         self.open(base_url)
 
         #positive: user has enough balance to buy the ticket
-        self.type("#buy-name", "TESTticket4") 
+        self.type("#buy-name", "testTicket1") 
         self.type("#buy-quantity", "30")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message")
@@ -223,28 +223,28 @@ class FrontEndR6Test(BaseCase):
         self.sell_input()
 
         #negative1: enter invalid ticket name with invalid character
-        self.type("#buy-name", "TESTticket4_") 
+        self.type("#buy-name", "testTicket1_") 
         self.type("#buy-quantity", "45")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message_b")
         self.assert_text("Ticket format invalid", "#message_b")
         self.open(base_url)
         #negative2: enter invalid ticket name with invalid length
-        self.type("#buy-name", 7*"TESTticket4") 
+        self.type("#buy-name", 7*"testTicket1") 
         self.type("#buy-quantity", "45")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message_b")
         self.assert_text("Ticket format invalid", "#message_b")
         self.open(base_url)
         #negative3: enter valid ticket name and invalid ticket quantity
-        self.type("#buy-name", "TESTticket4") 
+        self.type("#buy-name", "testTicket1") 
         self.type("#buy-quantity", "-1")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message_b")
         self.assert_text("Ticket format invalid", "#message_b")
         self.open(base_url)
         #negative4: enter valid ticket name and unavailable quantity
-        self.type("#buy-name", "TESTticket4") 
+        self.type("#buy-name", "testTicket1") 
         self.type("#buy-quantity", "60")
         self.click('input[value="Submit Buying Ticket"]')
         self.assert_element("#message_b")
