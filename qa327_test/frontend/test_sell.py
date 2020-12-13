@@ -31,7 +31,7 @@ class FrontEndSellTest(BaseCase):
         # click enter button
         self.click('input[type="submit"]')
 
-    # The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character.
+    # R4.1 The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character.
     @patch('qa327.backend.get_user', return_value=test_user)
     def test_name_format(self, *_):
         # login to the profile
@@ -91,8 +91,8 @@ class FrontEndSellTest(BaseCase):
 
         self.open(base_url)
 
-    # The name of the ticket is no longer than 60 characters
-    # The name of the tickets has to contain at least 6 characters
+    # R4.2 The name of the ticket is no longer than 60 characters
+    # R4.8 (optional) The name of the tickets has to contain at least 6 characters
     @patch('qa327.backend.get_user', return_value=test_user)
     def test_name_length(self, *_):
         # login to the profile
@@ -139,7 +139,7 @@ class FrontEndSellTest(BaseCase):
 
         self.open(base_url)
 
-    # The quantity of the tickets has to be more than 0, and less than or equal to 100.
+    # R4.3 The quantity of the tickets has to be more than 0, and less than or equal to 100.
     @patch('qa327.backend.get_user', return_value=test_user)
     def test_quantity(self, *_):
         # login to the profile
@@ -186,7 +186,7 @@ class FrontEndSellTest(BaseCase):
 
         self.open(base_url)
 
-    # Price has to be of range [10, 100]
+    # R4.4 Price has to be of range [10, 100]
     @patch('qa327.backend.get_user', return_value=test_user)
     def test_price(self, *_):
         # login to the profile
@@ -233,7 +233,7 @@ class FrontEndSellTest(BaseCase):
 
         self.open(base_url)
 
-    # Date must be given in the format YYYYMMDD (e.g. 20200901)
+    # R4.5 Date must be given in the format YYYYMMDD (e.g. 20200901)
     @patch('qa327.backend.get_user', return_value=test_user)
     def test_date(self, *_):
         # login to the profile
@@ -267,7 +267,7 @@ class FrontEndSellTest(BaseCase):
 
         self.open(base_url)
 
-    # For any errors, redirect back to / and show an error message
+    # R4.6 For any errors, redirect back to / and show an error message
     @patch('qa327.backend.get_user', return_value=test_user)
     def test_redirect(self, *_):
         # login to the profile
@@ -329,7 +329,7 @@ class FrontEndSellTest(BaseCase):
 
         self.open(base_url)
 
-    # The added new ticket information will be posted on the user profile page
+    # R4.7 The added new ticket information will be posted on the user profile page
     @patch('qa327.backend.get_user', return_value=test_user)
     def test_post_ticket(self, *_):
         # login to the profile
