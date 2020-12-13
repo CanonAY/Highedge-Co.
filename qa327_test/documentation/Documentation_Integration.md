@@ -1,0 +1,3 @@
+| Test Name                                  | Tested Walk-through                            | Nature of Failure             | Error Classification                          | Actions Taken                                             |
+|--------------------------------------------|------------------------------------------------|-------------------------------|-----------------------------------------------|-----------------------------------------------------------|
+| TestIntegrationPosting.test_posting        | User post new ticket.                          | Unexpected Assertion Failure  | Error in testing code, missing import.        | Add line "from selenium.webdriver.common.keys import Keys"|
